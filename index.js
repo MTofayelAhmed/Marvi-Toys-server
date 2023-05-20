@@ -48,7 +48,7 @@ app.get('/search/:text', async(req, res)=>{
     });
 
     app.get("/toys", async (req, res) => {
-      const cursor = toyCollection.find();
+      const cursor = toyCollection.find().sort({price: 1});
       const result = await cursor.toArray();
       res.send(result);
     });
@@ -89,7 +89,8 @@ app.get('/search/:text', async(req, res)=>{
       if (req.query?.email) {
         query = { sellerEmail: req.query.email };
       }
-      const result = await toyCollection.find(query).toArray();
+    
+      const result = await toyCollection.find(query).sort({price: 1}).toArray();
       res.send(result);
     });
 
