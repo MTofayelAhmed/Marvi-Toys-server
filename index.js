@@ -25,6 +25,20 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     client.connect();
     const toyCollection = client.db("toyDB").collection("toys");
+   
+    const indexKey = {name: 1}
+    const indexOptions= {Name: "toysName"}
+    const result = await toyCollection.createIndex(indexKey, indexOptions)
+
+
+
+app.get('/search/:text', async(req, res)=>{
+  const searchText = req.params.text;
+  const result = await toyCollection.find({
+    $or:[ {name: {$regex : searchText, $options: "i"}}]
+  }).toArray()
+  res.send(result)
+})
 
     app.post("/toys", async (req, res) => {
       const newToy = req.body;
@@ -59,6 +73,15 @@ async function run() {
 
       res.send(result);
     });
+
+    app.get('/toy/:text', async (req, res)=>{
+      console.log(req.params.text)
+      if(req.params.text == "Marvel" || req.params.text == "DC comics" || req.params.text =="StarWar"){
+        const result = await toyCollection.find({category: req.params.text }).toArray()
+        res.send(result)
+      }
+    })
+
 
     app.get("/toys", async (req, res) => {
       console.log(req.query.email);
