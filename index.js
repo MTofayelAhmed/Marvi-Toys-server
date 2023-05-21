@@ -47,7 +47,7 @@ app.get('/search/:text', async(req, res)=>{
       res.send(result);
     });
 
-    app.get("/toys", async (req, res) => {
+    app.get("/tab", async (req, res) => {
       const cursor = toyCollection.find().sort({price: 1});
       const result = await cursor.toArray();
       res.send(result);
